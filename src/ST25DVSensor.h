@@ -24,15 +24,9 @@
 #include "ST25DV_IO/st25dv_io.h"
 #include "libNDEF/NDEF_class.h"
 
-#if defined(ARDUINO_SAM_DUE)
-  #define WIRE Wire1
-#else
-  #define WIRE Wire
-#endif
-
 class ST25DV {
   public:
-    ST25DV(int32_t gpo, int32_t lpd, TwoWire *i2c, Stream *serial = NULL) : st25dv_io(gpo, lpd, i2c, serial), ndef(&st25dv_io) {}
+    ST25DV(int32_t gpo, int32_t lpd, TwoWire *i2c) : st25dv_io(gpo, lpd, i2c), ndef(&st25dv_io) {}
 
     int begin();
     int writeURI(String protocol, String uri, String info);

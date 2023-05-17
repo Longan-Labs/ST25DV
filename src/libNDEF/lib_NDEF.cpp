@@ -29,9 +29,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "lib_NDEF.h"
-#include "lib_NDEF_Bluetooth.h"
-#include "lib_NDEF_Handover.h"
-#include "lib_NDEF_Wifi.h"
+//#include "lib_NDEF_Bluetooth.h"
+//#include "lib_NDEF_Handover.h"
+//#include "lib_NDEF_Wifi.h"
 #include "NDEF_class.h"
 /** @addtogroup NFC_libraries
  *  @{
@@ -229,10 +229,14 @@ void NDEF::NDEF_ParseWellKnownType(sRecordInfo_t *pRecordStruct)
 
   else if (!memcmp(&(pRecordStruct->Type), TEXT_TYPE_STRING, pRecordStruct->TypeLength)) {
     pRecordStruct->NDEF_Type = TEXT_TYPE;
-  } else if ((!memcmp(&(pRecordStruct->Type), NDEF_HANDOVER_SELECT_TYPE_STR, pRecordStruct->TypeLength)) ||
+  } 
+  #if 0
+  else if ((!memcmp(&(pRecordStruct->Type), NDEF_HANDOVER_SELECT_TYPE_STR, pRecordStruct->TypeLength)) ||
              (!memcmp(&(pRecordStruct->Type), NDEF_HANDOVER_REQUEST_TYPE_STR, pRecordStruct->TypeLength))) {
     pRecordStruct->NDEF_Type = HANDOVER_TYPE;
-  } else {
+  } 
+  #endif
+  else {
     pRecordStruct->NDEF_Type = UNKNOWN_TYPE;
   }
 }
@@ -249,13 +253,21 @@ void NDEF::NDEF_ParseMediaType(sRecordInfo_t *pRecordStruct)
     pRecordStruct->NDEF_Type = VCARD_TYPE;
   } else if (!memcmp(&(pRecordStruct->Type), XVCARD2_TYPE_STRING, pRecordStruct->TypeLength)) {
     pRecordStruct->NDEF_Type = VCARD_TYPE;
-  } else if (!memcmp(&pRecordStruct->Type, NDEF_BLUETOOTH_BREDR_MIME_TYPE,  pRecordStruct->TypeLength)) {
+  } 
+#if BLUETOOTN_EN
+  else if (!memcmp(&pRecordStruct->Type, NDEF_BLUETOOTH_BREDR_MIME_TYPE,  pRecordStruct->TypeLength)) {
     pRecordStruct->NDEF_Type = BT_TYPE;
-  } else if (!memcmp(&pRecordStruct->Type, NDEF_BLUETOOTH_BLE_MIME_TYPE,  pRecordStruct->TypeLength)) {
+  } 
+  else if (!memcmp(&pRecordStruct->Type, NDEF_BLUETOOTH_BLE_MIME_TYPE,  pRecordStruct->TypeLength)) {
     pRecordStruct->NDEF_Type = BLE_TYPE;
-  } else if (!memcmp(&pRecordStruct->Type, WIFITOKEN_TYPE_STRING,  pRecordStruct->TypeLength)) {
+  } 
+#endif
+#if 0
+  else if (!memcmp(&pRecordStruct->Type, WIFITOKEN_TYPE_STRING,  pRecordStruct->TypeLength)) {
     pRecordStruct->NDEF_Type = URI_WIFITOKEN_TYPE;
-  } else {
+  } 
+#endif  
+  else {
     pRecordStruct->NDEF_Type = UNKNOWN_TYPE;
   }
 }

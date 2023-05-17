@@ -21,12 +21,11 @@
 #include "st25dv_io.h"
 
 
-ST25DV_IO::ST25DV_IO(int32_t gpo, int32_t lpd, TwoWire *i2c, Stream *serial)
+ST25DV_IO::ST25DV_IO(int32_t gpo, int32_t lpd, TwoWire *i2c)
 {
   _gpo = gpo;
   _lpd = lpd;
   _pwire = i2c;
-  _serial = serial;
 }
 
 /******************************** LINK EEPROM COMPONENT *****************************/
@@ -52,35 +51,11 @@ NFCTAG_StatusTypeDef ST25DV_IO::ST25DV_IO_MemWrite(const uint8_t *const pData, c
     return NFCTAG_ERROR;
   }
 
-  if (_serial != NULL) {
-    //  _serial->println(SP);
-    _serial->print("  w ");
-    sprintf(tmp, "%02X", Addr);
-    _serial->print(tmp);
-    _serial->print("@");
-    sprintf(tmp, "%02X", TarAddr >> 8);
-    _serial->print(tmp);
-    sprintf(tmp, "%02X", TarAddr & 0xFF);
-    _serial->print(tmp);
-    _serial->print(":");
-    _serial->println(Size);
-    _serial->print("  ");
-    for (uint16_t d = 0; d < Size; d++) {
-      sprintf(tmp, "%02X", pData[d]);
-      _serial->print(tmp);
-    }
-    _serial->println("");
-  }
-
   _pwire->beginTransmission(Addr); // transmit to device
   _pwire->write(TarAddr >> 8);   // send memory address MSB
   _pwire->write(TarAddr & 0xFF); // send memory address LSB
   _pwire->write(pData, Size);        // sends  bytes
   ret = _pwire->endTransmission(true);    // stop transmitting
-  if (_serial != NULL) {
-    _serial->print("  =");
-    _serial->println(ret);
-  }
 
   if (ret == 0) {
     /* Poll until EEPROM is available */
@@ -97,9 +72,6 @@ NFCTAG_StatusTypeDef ST25DV_IO::ST25DV_IO_MemWrite(const uint8_t *const pData, c
 #if defined(ARDUINO_ARCH_ARC) || defined(ARDUINO_ARCH_ARC32)
   // Arduino 101 i2c seems buggy after an address NACK: restart the i2c
   else if (ret == 2) {
-    if (_serial != NULL) {
-      _serial->print("  -\n");
-    }
     _pwire->begin();
   }
 #endif
@@ -125,19 +97,6 @@ NFCTAG_StatusTypeDef ST25DV_IO::ST25DV_IO_MemRead(uint8_t *const pData, const ui
     return NFCTAG_ERROR;
   }
 
-  if (_serial != NULL) {
-    //  _serial->println(SP);
-    _serial->print("  r ");
-    sprintf(tmp, "%02X", Addr);
-    _serial->print(tmp);
-    _serial->print("@");
-    sprintf(tmp, "%02X", TarAddr >> 8);
-    _serial->print(tmp);
-    sprintf(tmp, "%02X", TarAddr & 0xFF);
-    _serial->print(tmp);
-    _serial->print(":");
-    _serial->println(Size);
-  }
   _pwire->beginTransmission(Addr);    // Get the slave's attention, tell it we're sending a command byte
   _pwire->write(TarAddr >> 8);           //  The command byte, sets pointer to register with address of 0x32
   _pwire->write(TarAddr & 0xFF);         //  The command byte, sets pointer to register with address of 0x32
@@ -154,30 +113,7 @@ NFCTAG_StatusTypeDef ST25DV_IO::ST25DV_IO_MemRead(uint8_t *const pData, const ui
   while (_pwire->available()) {
     pData[i++] = _pwire->read();      // read that byte into 'slaveByte2' variable
   }
-  if (_serial != NULL) {
-    _serial->print("  ");
-    for (int d = 0; d < i; d++) {
-      sprintf(tmp, "%02X", pData[d]);
-      _serial->print(tmp);
-    }
-    _serial->println("");
-  }
 
-  /*
-  It doesn't seem like Arduino wants you to call `endTransmission`
-  after `requestFrom`. On the ESP32 the ret value is 8 because it
-  is an `endTransmission` without a `startTransmission` which is
-  considered an error by the library.
-  */
-  // ret = _pwire->endTransmission();
-  // if (_serial != NULL) {
-  //   //  _serial->println(pData[0]);
-  //   _serial->print("  =");
-  //   _serial->println(ret);
-  //   //  _serial->print("  ");
-  //   //  _serial->println(pData[0]);
-  //   //  _serial->println((uint32_t)pData);
-  // }
   return NFCTAG_ConvertStatus(ret);
 }
 
@@ -209,38 +145,11 @@ NFCTAG_StatusTypeDef ST25DV_IO::ST25DV_IO_Read(uint8_t *const pData, const uint8
   if (_pwire == NULL) {
     return NFCTAG_ERROR;
   }
-  if (_serial != NULL) {
-    _serial->print("  r");
-    _serial->print(":");
-    _serial->println(Size);
-  }
   // be carefully with the (int)Size, the size parameter us no more on 16 bits but only 15 bits (the cast is required for arduino UNO)
   byte ret = _pwire->requestFrom((int)Addr, (int)Size); // Tell slave we need to read 1byte from the current register
   while (_pwire->available()) {
     pData[i++] = _pwire->read();      // read that byte into 'slaveByte2' variable
   }
-
-  if (_serial != NULL) {
-    _serial->print("  ");
-    for (int d = 0; d < i; d++) {
-      sprintf(tmp, "%02X", pData[d]);
-      _serial->print(tmp);
-    }
-    _serial->println("");
-  }
-  /*
-  It doesn't seem like Arduino wants you to call `endTransmission`
-  after `requestFrom`. On the ESP32 the ret value is 8 because it
-  is an `endTransmission` without a `startTransmission` which is
-  considered an error by the library.
-  */
-  // ret = _pwire->endTransmission();
-
-  // if (_serial != NULL) {
-  //   //  _serial->println(pData[0]);
-  //   _serial->print("  =");
-  //   _serial->println(ret);
-  // }
   return NFCTAG_ConvertStatus(ret);
 }
 
@@ -258,17 +167,11 @@ NFCTAG_StatusTypeDef ST25DV_IO::ST25DV_IO_IsDeviceReady(const uint8_t DevAddr, c
   if (_pwire == NULL) {
     return NFCTAG_ERROR;
   }
-  if (_serial != NULL) {
-    _serial->println("  ?");
-  }
 
   while ((count++ < Trials) && ret) {
     _pwire->beginTransmission(DevAddr >> 1);
     ret = _pwire->endTransmission();
-    if (_serial != NULL) {
-      _serial->print("  =");
-      _serial->println(ret);
-    }
+
   }
   return NFCTAG_ConvertStatus(ret);
 }
@@ -2005,9 +1908,4 @@ int32_t ST25DV_IO::get_lpd()
 TwoWire *ST25DV_IO::get_pwire()
 {
   return _pwire;
-}
-
-Stream *ST25DV_IO::get_pserial()
-{
-  return _serial;
 }

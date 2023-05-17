@@ -55,14 +55,6 @@ typedef struct {
   #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 #endif
 
-/*
-#undef FAIL
-#define FAIL 0
-
-#undef PASS
-#define PASS !FAIL
-*/
-
 #define NFCTAG_4K_SIZE            ((uint32_t) 0x200)
 #define NFCTAG_16K_SIZE           ((uint32_t) 0x800)
 #define NFCTAG_64K_SIZE           ((uint32_t) 0x2000)

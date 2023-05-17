@@ -3,17 +3,19 @@
 #include "libNDEF/NDEFcommon.h"
 #include "libNDEF/tagtype5_wrapper.h"
 #include "libNDEF/lib_NDEF_URI.h"
-#include "libNDEF/lib_NDEF_AAR.h"
-#include "libNDEF/lib_NDEF_Bluetooth.h"
-#include "libNDEF/lib_NDEF_Email.h"
-#include "libNDEF/lib_NDEF_Handover.h"
-#include "libNDEF/lib_NDEF_Geo.h"
-#include "libNDEF/lib_NDEF_MyApp.h"
-#include "libNDEF/lib_NDEF_SMS.h"
-#include "libNDEF/lib_NDEF_Text.h"
-#include "libNDEF/lib_NDEF_Vcard.h"
-#include "libNDEF/lib_NDEF_Wifi.h"
+//#include "libNDEF/lib_NDEF_AAR.h"
+//#include "libNDEF/lib_NDEF_Bluetooth.h"
+//#include "libNDEF/lib_NDEF_Email.h"
+//#include "libNDEF/lib_NDEF_Handover.h"
+//#include "libNDEF/lib_NDEF_Geo.h"
+//#include "libNDEF/lib_NDEF_MyApp.h"
+//#include "libNDEF/lib_NDEF_SMS.h"
+//#include "libNDEF/lib_NDEF_Text.h"
+//#include "libNDEF/lib_NDEF_Vcard.h"
+//#include "libNDEF/lib_NDEF_Wifi.h"
 #include "ST25DV_IO/st25dv_io.h"
+
+#define BLUETOOTN_EN    0
 
 /**
   * @brief  Tag Type 5 State enumeration definition.
@@ -71,47 +73,48 @@ class NDEF {
     uint32_t NDEF_GetRecordLength(sRecordInfo_t *pRecord);
 
     //lib_NDEF_AAR
-    uint16_t NDEF_AddAAR(const sAARInfo *pAARStruct);
+    //uint16_t NDEF_AddAAR(const sAARInfo *pAARStruct);
 
+#if BLUETOOTN_EN
     //lib_NDEF_Bluetooth
     uint8_t *NDEF_BluetoothCopy(uint8_t *dst, uint8_t *src, uint32_t length);
     uint16_t NDEF_ReadBluetoothOOB(sRecordInfo_t *pRecordStruct, Ndef_Bluetooth_OOB_t *pBluetooth);
     uint16_t NDEF_AppendBluetoothOOB(Ndef_Bluetooth_OOB_t *pBluetooth, char *RecordID);
     void NDEF_PrepareBluetoothMessage(Ndef_Bluetooth_OOB_t  *pBluetooth, uint8_t *pNDEFMessage, uint16_t *size);
     uint32_t NDEF_GetBluetoothOOBLength(Ndef_Bluetooth_OOB_t *pBluetooth);
-
+#endif
     //lib_NDEF_Email
-    uint16_t NDEF_ReadEmail(sRecordInfo_t *pRecordStruct, sEmailInfo *pEmailStruct);
-    uint16_t NDEF_WriteEmail(sEmailInfo *pEmailStruct);
-    void NDEF_PrepareEmailMessage(sEmailInfo *pEmailStruct, uint8_t *pNDEFMessage, uint16_t *size);
-    void NDEF_closeEmail(sEmailInfo *pEmailStruct);
+    //uint16_t NDEF_ReadEmail(sRecordInfo_t *pRecordStruct, sEmailInfo *pEmailStruct);
+    //uint16_t NDEF_WriteEmail(sEmailInfo *pEmailStruct);
+    //void NDEF_PrepareEmailMessage(sEmailInfo *pEmailStruct, uint8_t *pNDEFMessage, uint16_t *size);
+    //void NDEF_closeEmail(sEmailInfo *pEmailStruct);
 
     //lib_NDEF_Geo
-    uint16_t NDEF_ReadGeo(sRecordInfo_t *pRecordStruct, sGeoInfo *pGeoStruct);
-    uint16_t NDEF_WriteGeo(sGeoInfo *pGeoStruct);
-    void NDEF_PrepareGeoMessage(sGeoInfo *pGeoStruct, uint8_t *pNDEFMessage, uint16_t *size);
+    //uint16_t NDEF_ReadGeo(sRecordInfo_t *pRecordStruct, sGeoInfo *pGeoStruct);
+    //uint16_t NDEF_WriteGeo(sGeoInfo *pGeoStruct);
+    //void NDEF_PrepareGeoMessage(sGeoInfo *pGeoStruct, uint8_t *pNDEFMessage, uint16_t *size);
 
     //lib_NDEF_Handover
-    uint16_t NDEF_ReadHandover(sRecordInfo_t *pRecord,  Ndef_Handover_t *pHandover);
-    uint16_t NDEF_ReadAC(uint8_t ac_nb, Ndef_Handover_t *pHandover, Ndef_Handover_alternative_carrier_t *pAC);
-    uint16_t NDEF_ReadAuxData(uint8_t aux_data_nb, Ndef_Handover_alternative_carrier_t *pAC, sRecordInfo_t *pRecord);
-    uint16_t NDEF_CreateHandover(Ndef_Handover_t  *pHandover, sRecordInfo_t *pRecord);
-    uint16_t NDEF_AddAlternativeCarrier(Ndef_Handover_alternative_carrier_t *pAC, char *CarrierDataRef, char **AuxDataRefID, sRecordInfo_t *pRecord);
-    uint16_t NDEF_WriteHandover(sRecordInfo_t *pRecord, uint8_t *pNdef);
-    uint32_t NDEF_GetACDataLength(Ndef_Handover_alternative_carrier_t *pAC, char *CarrierDataRef, char **AuxDataRefID);
+    //uint16_t NDEF_ReadHandover(sRecordInfo_t *pRecord,  Ndef_Handover_t *pHandover);
+    //uint16_t NDEF_ReadAC(uint8_t ac_nb, Ndef_Handover_t *pHandover, Ndef_Handover_alternative_carrier_t *pAC);
+    //uint16_t NDEF_ReadAuxData(uint8_t aux_data_nb, Ndef_Handover_alternative_carrier_t *pAC, sRecordInfo_t *pRecord);
+    //uint16_t NDEF_CreateHandover(Ndef_Handover_t  *pHandover, sRecordInfo_t *pRecord);
+    //uint16_t NDEF_AddAlternativeCarrier(Ndef_Handover_alternative_carrier_t *pAC, char *CarrierDataRef, char **AuxDataRefID, sRecordInfo_t *pRecord);
+    //uint16_t NDEF_WriteHandover(sRecordInfo_t *pRecord, uint8_t *pNdef);
+    //uint32_t NDEF_GetACDataLength(Ndef_Handover_alternative_carrier_t *pAC, char *CarrierDataRef, char **AuxDataRefID);
 
     //lib_NDEF_MyApp
-    uint16_t NDEF_ReadMyApp(sRecordInfo_t *pRecordStruct, sMyAppInfo *pMyAppStruct);
-    uint16_t NDEF_WriteMyApp(sMyAppInfo *pMyAppStruct);
+    //uint16_t NDEF_ReadMyApp(sRecordInfo_t *pRecordStruct, sMyAppInfo *pMyAppStruct);
+    //uint16_t NDEF_WriteMyApp(sMyAppInfo *pMyAppStruct);
 
     //lib_NDEF_SMS
-    uint16_t NDEF_ReadSMS(sRecordInfo_t *pRecordStruct, sSMSInfo *pSMSStruct);
-    uint16_t NDEF_WriteSMS(sSMSInfo *pSMSStruct);
-    void NDEF_PrepareSMSMessage(sSMSInfo *pSMSStruct, uint8_t *pNDEFMessage, uint16_t *size);
+    //uint16_t NDEF_ReadSMS(sRecordInfo_t *pRecordStruct, sSMSInfo *pSMSStruct);
+    //uint16_t NDEF_WriteSMS(sSMSInfo *pSMSStruct);
+    //void NDEF_PrepareSMSMessage(sSMSInfo *pSMSStruct, uint8_t *pNDEFMessage, uint16_t *size);
 
     //lib_NDEF_Text
-    uint16_t NDEF_WriteText(char *text);
-    uint16_t NDEF_ReadText(sRecordInfo_t *pRecordStruct, NDEF_Text_info_t *pText);
+    //uint16_t NDEF_WriteText(char *text);
+    //uint16_t NDEF_ReadText(sRecordInfo_t *pRecordStruct, NDEF_Text_info_t *pText);
 
     //lib_NDEF_URI
     uint16_t NDEF_ReadURI(sRecordInfo_t *pRecordStruct, sURI_Info *pURI);
@@ -120,14 +123,14 @@ class NDEF {
     char getUriType(char *protocol);
 
     //lib_NDEF_Vcard
-    uint16_t NDEF_ReadVcard(sRecordInfo_t *pRecordStruct, sVcardInfo *pVcardStruct);
-    uint16_t NDEF_WriteVcard(sVcardInfo *pVcardStruct);
-    void NDEF_PrepareVcardMessage(sVcardInfo *pVcardStruct, uint8_t *pNDEFMessage, uint16_t *size);
-    int NDEF_getVcardPicture(uint8_t *pPayload, uint32_t PayloadSize,  uint8_t *pPict);
+    //uint16_t NDEF_ReadVcard(sRecordInfo_t *pRecordStruct, sVcardInfo *pVcardStruct);
+    //uint16_t NDEF_WriteVcard(sVcardInfo *pVcardStruct);
+    //void NDEF_PrepareVcardMessage(sVcardInfo *pVcardStruct, uint8_t *pNDEFMessage, uint16_t *size);
+    //int NDEF_getVcardPicture(uint8_t *pPayload, uint32_t PayloadSize,  uint8_t *pPict);
 
     //lib_NDEF_Wifi
-    uint16_t NDEF_ReadWifiToken(struct sRecordInfo *pRecordStruct, sWifiTokenInfo *pWifiTokenStruct);
-    uint16_t NDEF_WriteWifiToken(sWifiTokenInfo *pWifiTokenStruct);
+    //uint16_t NDEF_ReadWifiToken(struct sRecordInfo *pRecordStruct, sWifiTokenInfo *pWifiTokenStruct);
+    //uint16_t NDEF_WriteWifiToken(sWifiTokenInfo *pWifiTokenStruct);
 
     //lib_wrapper
     uint16_t NfcTag_ReadNDEF(uint8_t *pData);
@@ -154,32 +157,32 @@ class NDEF {
     uint16_t NDEF_IdentifySPRecord(sRecordInfo_t *pRecordStruct, uint8_t *pPayload);
 
     //Email static
-    void NDEF_FillEmailStruct(uint8_t *pPayload, uint32_t PayloadSize, sEmailInfo *pEmailStruct);
-    void NDEF_ReadURI_Email(sRecordInfo_t *pRecordStruct, sEmailInfo *pEmailStruct);
+    //void NDEF_FillEmailStruct(uint8_t *pPayload, uint32_t PayloadSize, sEmailInfo *pEmailStruct);
+    //void NDEF_ReadURI_Email(sRecordInfo_t *pRecordStruct, sEmailInfo *pEmailStruct);
   private:
 
     //Geo static
-    void NDEF_FillGeoStruct(uint8_t *pPayload, uint32_t PayloadSize, sGeoInfo *pGeoStruct);
-    void NDEF_ReadURI_Geo(sRecordInfo_t *pRecordStruct, sGeoInfo *pGeoStruct);
+    //void NDEF_FillGeoStruct(uint8_t *pPayload, uint32_t PayloadSize, sGeoInfo *pGeoStruct);
+    //void NDEF_ReadURI_Geo(sRecordInfo_t *pRecordStruct, sGeoInfo *pGeoStruct);
 
     //MyApp static
-    void NDEF_Extract_M24SRDiscoveryApp_Input(sRecordInfo_t *pRecordStruct, sMyAppInfo *pMyAppStruct);
+    //void NDEF_Extract_M24SRDiscoveryApp_Input(sRecordInfo_t *pRecordStruct, sMyAppInfo *pMyAppStruct);
 
     //SMS static
-    void NDEF_FillSMSStruct(uint8_t *pPayload, uint32_t PayloadSize, sSMSInfo *pSMSStruct);
-    void NDEF_ReadURI_SMS(sRecordInfo_t *pRecordStruct, sSMSInfo *pSMSStruct);
+    //void NDEF_FillSMSStruct(uint8_t *pPayload, uint32_t PayloadSize, sSMSInfo *pSMSStruct);
+    //void NDEF_ReadURI_SMS(sRecordInfo_t *pRecordStruct, sSMSInfo *pSMSStruct);
 
     //URI static
     void NDEF_Parse_WellKnowType(sRecordInfo_t *pRecordStruct, sURI_Info *pURI);
 
 
     //Vcard static
-    void NDEF_FillVcardStruct(uint8_t *pPayload, uint32_t PayloadSize, char *pKeyWord, uint32_t SizeOfKeyWord, uint8_t *pString);
-    void NDEF_ExtractVcard(sRecordInfo_t *pRecordStruct, sVcardInfo *pVcardStruct);
+    //void NDEF_FillVcardStruct(uint8_t *pPayload, uint32_t PayloadSize, char *pKeyWord, uint32_t SizeOfKeyWord, uint8_t *pString);
+    //void NDEF_ExtractVcard(sRecordInfo_t *pRecordStruct, sVcardInfo *pVcardStruct);
 
     //Wifi static
-    void NDEF_FillWifiTokenStruct(uint8_t *pPayload, uint32_t PayloadSize, sWifiTokenInfo *pWifiTokenStruct);
-    void NDEF_Read_WifiToken(struct sRecordInfo *pRecordStruct, sWifiTokenInfo *pWifiTokenStruct);
+    //void NDEF_FillWifiTokenStruct(uint8_t *pPayload, uint32_t PayloadSize, sWifiTokenInfo *pWifiTokenStruct);
+    //void NDEF_Read_WifiToken(struct sRecordInfo *pRecordStruct, sWifiTokenInfo *pWifiTokenStruct);
 
     //libNDEF.c
     /** @brief This buffer is used to store the data sent/received by the TAG. */
@@ -191,7 +194,7 @@ class NDEF {
     /** @brief Size of the buffer used when a record has to be prepared. */
     uint32_t NDEF_Record_Buffer_size = NDEF_RECORD_MAX_SIZE;
     /* Specific buffer to prepare the Alternative Carrier record */
-    uint8_t NDEF_AlternativeCarrier_Buffer[NDEF_AC_BUFFER_SIZE];
+    //uint8_t NDEF_AlternativeCarrier_Buffer[NDEF_AC_BUFFER_SIZE];
 
     /* In case of smart Poster composed with different record, 3 records supported so far */
     sRecordInfo_t SPRecordStruct1;

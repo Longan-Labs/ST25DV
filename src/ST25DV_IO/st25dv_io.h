@@ -20,7 +20,7 @@
 #define _ST25DV_IO_H_
 #include "Arduino.h"
 #include <Wire.h>
-#include <Stream.h>
+//#include <Stream.h>
 
 #define ST25DV_OK                            0
 #define ST25DV_MAX_INSTANCE                  1
@@ -564,15 +564,9 @@ typedef struct {
 } ST25DV_PASSWD;
 
 
-#if defined(ARDUINO_SAM_DUE)
-  #define WIRE Wire1
-#else
-  #define WIRE Wire
-#endif
-
 class ST25DV_IO {
   public:
-    ST25DV_IO(int32_t gpo, int32_t ldp, TwoWire *i2c, Stream *serial = NULL);
+    ST25DV_IO(int32_t gpo, int32_t ldp, TwoWire *i2c);
 
     NFCTAG_StatusTypeDef ST25DV_i2c_Init(void);
     NFCTAG_StatusTypeDef ST25DV_i2c_ReadID(uint8_t *const pICRef);
@@ -662,13 +656,11 @@ class ST25DV_IO {
     int32_t get_gpo();
     int32_t get_lpd();
     TwoWire *get_pwire();
-    Stream *get_pserial();
 
   protected:
     int32_t _gpo;
     int32_t _lpd;
     TwoWire *_pwire;
-    Stream *_serial;
 };
 
 #endif

@@ -186,44 +186,6 @@ void ST25DV::ST25DV_SelectI2cSpeed(uint8_t i2cspeedchoice)
   if (st25dv_io.get_pwire() == NULL) {
     return;
   }
-
-#if !defined(ARDUINO_ARCH_ARC) && !defined(ARDUINO_ARCH_ARC32)
-  switch (i2cspeedchoice) {
-    case 0:
-
-      st25dv_io.get_pwire()->setClock(10000);
-      break;
-
-    case 1:
-
-      st25dv_io.get_pwire()->setClock(100000);
-      break;
-
-    case 2:
-
-      st25dv_io.get_pwire()->setClock(200000);
-      break;
-
-    case 3:
-
-      st25dv_io.get_pwire()->setClock(400000);
-      break;
-
-    case 4:
-
-      st25dv_io.get_pwire()->setClock(800000);
-      break;
-
-    case 5:
-
-      st25dv_io.get_pwire()->setClock(1000000);
-      break;
-
-    default:
-
-      st25dv_io.get_pwire()->setClock(1000000);
-      break;
-  }
 }
 
 /**
@@ -236,4 +198,3 @@ void ST25DV::ST25DV_I2C_Init(void)
   st25dv_io.get_pwire()->begin();
 }
 
-#endif

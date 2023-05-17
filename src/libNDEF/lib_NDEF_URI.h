@@ -35,11 +35,8 @@
 #include "lib_NDEF.h"
 
 typedef struct {
-  //  char protocol[80];
-  //  char URI_Message[400];
-  //  char Information[400];
   char protocol[20];
-  char URI_Message[100];
+  char URI_Message[50];
   char Information[20];
 } sURI_Info;
 
