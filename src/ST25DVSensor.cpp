@@ -62,7 +62,7 @@ int ST25DV::readURI(String *s)
   uint16_t ret;
   sURI_Info uri = {"", "", ""};
   sRecordInfo_t recordInfo;
-  uint8_t NDEF_Buffer[100];
+  uint8_t NDEF_Buffer[50];
 
   // increase buffer size for bigger messages
   ret = ndef.NDEF_ReadNDEF(NDEF_Buffer);

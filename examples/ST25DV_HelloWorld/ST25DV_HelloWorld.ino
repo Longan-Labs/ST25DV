@@ -63,48 +63,43 @@
 ST25DV st25dv(12, -1, &DEV_I2C);
 
 void setup() {
-    const char uri_write_message[] = "pornhub.com";       // Uri message to write in the tag
-    const char uri_write_protocol[] = URI_ID_0x01_STRING; // Uri protocol to write in the tag
-    String uri_write = String(uri_write_protocol) + String(uri_write_message);
-    String uri_read;
+  const char uri_write_message[] = "seeedstudio.com";       // Uri message to write in the tag
+  const char uri_write_protocol[] = URI_ID_0x01_STRING; // Uri protocol to write in the tag
+  String uri_write = String(uri_write_protocol) + String(uri_write_message);
+  String uri_read;
 
-    pinMode(13, OUTPUT);
-    digitalWrite(13, LOW);
+  // Initialize serial for output.
+  Serial.begin(115200);
 
-    // Initialize serial for output.
-    Serial.begin(115200);
-    while(!Serial.available());
+  // The wire instance used can be omitted in case you use default Wire instance
+  if(st25dv.begin() == 0) {
+    Serial.println("System Init done!");
+  } else {
+    Serial.println("System Init failed!");
+    while(1);
+  }
 
-    // The wire instance used can be omitted in case you use default Wire instance
-    if(st25dv.begin() == 0) {
-        Serial.println("System Init done!");
-    } else {
-        Serial.println("System Init failed!");
-        while(1);
-    }
+  if(st25dv.writeURI(uri_write_protocol, uri_write_message, "")) {
+    Serial.println("Write failed!");
+    while(1);
+  }
 
-    if(st25dv.writeURI(uri_write_protocol, uri_write_message, "")) {
-        Serial.println("Write failed!");
-        while(1);
-    }
+  delay(100);
+  
+  if(st25dv.readURI(&uri_read)) {
+    Serial.println("Read failed!");
+    while(1);
+  }
 
-    delay(100);
+  Serial.println(uri_read.c_str());
 
-    if(st25dv.readURI(&uri_read)) {
-        Serial.println("Read failed!");
-        while(1);
-    }
-
-    Serial.println(uri_read.c_str());
-
-    if(strcmp(uri_read.c_str(), uri_write.c_str()) == 0) {
-        Serial.println("ok");
-        digitalWrite(13, HIGH);
-    } else {
-        Serial.println("fail");
-    }
+  if(strcmp(uri_read.c_str(), uri_write.c_str()) == 0) {
+    Serial.println("Successfully written and read!");
+  } else {
+    Serial.println("Read bad string!");
+  }
 }
 
-void loop() {
-    //empty loop
-}
+void loop() {  
+  //empty loop
+} 

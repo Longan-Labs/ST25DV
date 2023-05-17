@@ -57,24 +57,10 @@
 ******************************************************************************
 */
 
- 
 #include "ST25DVSensor.h"
 
-#define SerialPort      Serial
-
-#if defined(ARDUINO_B_L4S5I_IOT01A)
-// Pin definitions for board B-L4S5I_IOT01A
-  #define GPO_PIN PE4
-  #define LPD_PIN PE2
-  #define SDA_PIN PB11
-  #define SCL_PIN PB10
-  #define WireNFC MyWire
-  TwoWire MyWire(SDA_PIN, SCL_PIN);
-  ST25DV st25dv(12, -1, &MyWire);
-#else
-  #define DEV_I2C         Wire
-  ST25DV st25dv(12, -1, &DEV_I2C);
-#endif
+#define DEV_I2C         Wire
+ST25DV st25dv(12, -1, &DEV_I2C);
 
 void setup() {
   const char uri_write_message[] = "st.com/st25";       // Uri message to write in the tag
@@ -82,18 +68,18 @@ void setup() {
   String uri_write = String(uri_write_protocol) + String(uri_write_message);
 
   // Initialize serial for output.
-  SerialPort.begin(115200);
+  Serial.begin(115200);
 
   // The wire instance used can be omitted in case you use default Wire instance
   if(st25dv.begin() == 0) {
-    SerialPort.println("System Init done!");
+    Serial.println("System Init done!");
   } else {
-    SerialPort.println("System Init failed!");
+    Serial.println("System Init failed!");
     while(1);
   }
 
   if(st25dv.writeURI(uri_write_protocol, uri_write_message, "")) {
-    SerialPort.println("Write failed!");
+    Serial.println("Write failed!");
     while(1);
   }
 
